@@ -1,27 +1,33 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const { application } = require('express');
 require('dotenv').config()
 const router = express();
+const db = require('../models/abstract_model')
 
 const jsonParser = express.json();
 
-router.get("/products", jsonParser,  async function(req, res){
+router.get("/api/products", jsonParser,  async function(req, res){
     try {
-        res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' })
+        res.json(await db.getProducts())
     } catch (e) {
         console.log(e)
     }
 })
 
-router.post("/products", jsonParser, async function (req, res){
+router.post("/api/products", jsonParser, async function (req, res){
     try{
+        if(!req.body) return res.sendStatus(400);
+        const name = req.body.name;
+        const price = req.body.price
+        const picture = req.body.picture
+        const description = req.body.description
+        res.json(await db.postProducts(name, price, picture, description))
     } catch (e) {
         console.log (e)
     }
 })
 
-router.patch("/products", jsonParser, async function (req, res){
+router.patch("/api/products", jsonParser, async function (req, res){
     try {
 
     } catch (e) {
@@ -29,7 +35,7 @@ router.patch("/products", jsonParser, async function (req, res){
     }
 })
 
-router.put("/products", jsonParser, async function (req, res){
+router.put("/api/products/:id", jsonParser, async function (req, res){
     try {
 
     } catch (e) {
@@ -37,10 +43,12 @@ router.put("/products", jsonParser, async function (req, res){
     }
 })
 
-router.delete("/products", jsonParser, async function (req, res){
+router.delete("/api/products/:id", jsonParser, async function (req, res){
     try {
 
     } catch (e) {
         console.log(e)
     }
 })
+
+module.exports = router

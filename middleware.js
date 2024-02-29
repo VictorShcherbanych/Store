@@ -7,6 +7,8 @@ module.exports = function (req, res, next) {
         next()
     }
     try{
+        const auth = req.headers['authorization'];
+        if (!auth) return res.status(401).send('Access Denied');
         const token = req.headers.authorization.split(' ')[1]
         if (!token) {
             return res.status(403).json({message: "Користувач не авторизований"})

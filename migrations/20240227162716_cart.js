@@ -4,19 +4,16 @@
  */
 exports.up = async function(knex) {
     await knex.raw(`
-    create extension if not exists "uuid-ossp";
-
-    create table products (
+  
+    create table carts (
         uuid uuid not null default uuid_generate_v4(),
-        name text not null,
-        description text not null,
-        price integer not null,
-        picture text not null,
-        timestamp timestamp not null default now(),
+        user_id UUID NOT NULL,
+        products JSON
         primary key (uuid)
+        FOREIGN KEY (user_id) REFERENCES users (uuid)
     );
   `);
-};
+  };
 
 /**
  * @param { import("knex").Knex } knex
@@ -24,6 +21,6 @@ exports.up = async function(knex) {
  */
 exports.down = async function(knex) {
     await knex.raw(`
-      drop table products;
-    `);
-};
+    drop table carts;
+  `);
+  };

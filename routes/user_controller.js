@@ -1,4 +1,4 @@
-const db = require('../models/abstract_model')
+const db = require('../models/user_model')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { validationResult } = require ('express-validator');
@@ -24,7 +24,6 @@ module.exports = {
     },
     addUser: async (req, res) => {
         try {
-            console.log(req.body)
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({message: 'Помилка при реєстрації', errors})

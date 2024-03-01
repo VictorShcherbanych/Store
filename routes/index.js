@@ -3,8 +3,9 @@ require('dotenv').config()
 const router = express();
 const middleware = require('../middleware')
 const { check } = require ('express-validator');
-const product_controller = require ('../controllers/product_controller')
-const user_controller = require('../controllers/user_controller')
+const product_controller = require ('./product_controller')
+const user_controller = require('./user_controller');
+const cart_controller = require('./cart_controller');
 
 const jsonParser = express.json();
 
@@ -22,10 +23,10 @@ router.post('/api/register', jsonParser,
     check('email', 'Email некоректний').matches(/[@]/), user_controller.addUser);
 
 //routers for carts
-router.post("api/cart/add", jsonParser, middleware, async function (req,res){
-})
-router.post("api/cart/remove", jsonParser)
-router.post("api/cart/update",jsonParser)
+router.get('/api/cart', jsonParser, middleware, cart_controller.gerCart)
+router.post('/api/cart/add', jsonParser, middleware, cart_controller.addProduct)
+router.post("/api/cart/remove", jsonParser, middleware, cart_controller.removeProduct)
+router.post("/api/cart/update",jsonParser, middleware, cart_controller.updateQuantity)
 
 
 module.exports = router

@@ -1,0 +1,10 @@
+0. get linux
+1. GET /documents_with_products (documents, doc products, products, warehouses) *
+2. Generate 2 million records in each table using Linux/Unix bash *
+3. Test, Analyze (using "explain analyze" in psql) and Optimize query in (1) **
+4. Dockerize the app, deploy to docker.io **
+5. Run minikube. Deploy in minikube environment ***
+
+select *
+from users
+left join balance on users.user_id = balance.user_id

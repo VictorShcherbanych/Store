@@ -1,46 +1,56 @@
 const db = require('../models/cart_model')
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+
 
 module.exports = {
-    gerCart: async (req,res) => {
-        try{
+    getCart: async (req, res) => {
+        try {
             const userId = req.body.userId
             res.json(await db.getCart(userId))
-        }catch(e){
+        } catch (e) {
             console.error(e)
         }
     },
     addProduct: async (req, res) => {
         try {
-            const cart = await db.getCart(req.body.userId)
-            if(!cart[0]) await db.createCart(req.body.userId)
-            if (!req.body) return res.status(400).send('Не вказано бажаних позицій');
-            const userId = req.body.userId
-            const product = req.body.productId
-            const quantity = req.body.quantity
+            const {
+                body,
+                body: {
+                    userId,
+                    product,
+                    quantity,
+                }
+            } = req;
+
+
+            const cart = await db.getCart(userId)
+            console.log(cart)
+            if (!cart[0]) await db.createCart(userId)
+            if (!body) return res.status(400).send('Не вказано бажаних позицій');
+
             res.json(await db.addToCard(userId, product, quantity))
         } catch (e) {
             console.error(e)
         }
     },
     removeProduct: async (req, res) => {
-        try{
-            const userId = req.body.userId
-            const product_id = req.body.productId
-            await db.removeFromCart(userId, product_id)
-            res.json('Товар видалено')
-        }catch(e){
+        try {
+            const {
+                userId,
+                product_id
+            } = req.body;
+
+            res.json({ success: await db.removeFromCart(userId, product_id) });
+        } catch (e) {
             console.error(e)
         }
     },
     updateQuantity: async (req, res) => {
-        try{
+        try {
             const cartId = req.body.cartId
             const productid = req.body.productId
             const newQuantity = req.body.newQuantity
             res.json(await db.updateQuantity(cartId, productid, newQuantity))
-        }catch (e) {
+        } catch (e) {
             console.error(e)
         }
     }

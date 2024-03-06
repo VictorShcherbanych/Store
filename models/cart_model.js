@@ -13,6 +13,15 @@ module.exports = {
             console.error(e)
         }
     },
+    getCartWithProducts: async (cartId) =>{
+        try{
+            const products = await db('cart_items')
+                .where('cart_id', cartId)
+            return products
+        }catch (e){
+            console.error(e)
+        }
+    },
     createCart: async function (userId) {
         try{
             await db('carts')
@@ -71,5 +80,5 @@ module.exports = {
         }catch(e){
             console.error(e)
         }
-    }
+    },
 }

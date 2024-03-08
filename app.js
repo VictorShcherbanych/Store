@@ -5,7 +5,7 @@ const express = require('express');
 
 // Internal
 const router = require('./routes/index');
-const port = process.env.PORT || 5000; 
+const port = process.env.PORT || 3000; 
 
 
 const app = express(); 

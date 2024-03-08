@@ -10,13 +10,16 @@ if (!process.env.SERVER_USER) {
   
 module.exports = {
   development: {
-    client: process.env.SERVER_USER,
-    connection: process.env.PG_CONNECTION},
+    client: 'pg',
+    connection: process.env.PG_CONNECTION,
+    pool: {
+      min: 0,  // Minimum number of connections in the pool
+      max: 25, // Maximum number of connections in the pool
+    },
+  },
   migrations: {
     directory: `${__dirname}/./migrations`,
     tableName: 'knex_migrations',
+    schema: 'public'
   },
-  pool: {
-    min: 2,  // Minimum number of connections in the pool
-    max: 10, // Maximum number of connections in the pool
-}};
+};

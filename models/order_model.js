@@ -5,83 +5,80 @@ const db = knex(config.development);
 
 module.exports = {
     getOrders: async function (userId) {
-        try{
+        try {
             const orders = await db('orders')
                 .select('*')
                 .where('user_id', userId);
             return orders
-        }catch(e){
+        } catch (e) {
             console.error(e);
         }
     },
     getOrder: async function (orderId) {
-        try{
+        try {
             const order = await db('orders')
                 .where("uuid", orderId)
             return order
-        }catch(e){
+        } catch (e) {
             console.error(e)
         }
     },
-    createOrder: async (userId, 
-        status, 
-        totalAmount, 
-        shippingAddress, 
-        paymentMethod, 
-        paymentStatus, 
-        shippingMethod, 
-        shippingCost, 
-        comments,
-        cartId) => {
-            try{
+    createOrder: async (data, cartId) => {
+        try {
             const order = await db('orders')
                 .insert({
-                    user_id: userId,
-                    status: status,
-                    total_amount: totalAmount,
-                    shipping_address: shippingAddress,
-                    payment_method: paymentMethod,
-                    payment_status: paymentStatus,
-                    shipping_method: shippingMethod,
-                    shipping_cost: shippingCost,
-                    comments: comments
+                    user_id: data.userId,
+                    status: data.status,
+                    total_amount: data.total_amount,
+                    shipping_address: data.shipping_address,
+                    payment_method: data.payment_method,
+                    payment_status: data.payment_status,
+                    shipping_method: data.shipping_method,
+                    shipping_cost: data.shipping_cost,
+                    comments: data.comments
                 })
-            await knex.transaction(async (trx) => {
-                const products = await trx
-                  .select('product_id', 'quantity', 'price')
-                  .from('cart_items')
-                  .where({ card_id: cartId })
+            await db.transaction(async (trx) => {
 
+                const products = await trx
+                    .select('product_id', 'quantity', 'price')
+                    .from('cart_items')
+                    .where({ cart_id: cartId })
+
+                console.log(products)
+                const orderId = await db('orders')
+                    .select('uuid')
+                    .where({
+                        user_id: data.userId
+                    })
                 const insertData = products.map(product => ({
-                    order_id: order[0].uuid,
-                    product_id: product.id,
+                    order_id: orderId[0].uuid,
+                    product_id: product.product_id,
                     quantity: product.quantity,
                     price: product.price
                 })
                 );
-
                 await trx('order_items').insert(insertData);
             });
-            } catch(e){
-                console.error(e)
-            }
-    },
-    changeStatus: async (orderId, newStatus) => {
-        try{
-            await db('orders')
-                .where('uuid', orderId)
-                .update('status', newStatus)
-        }catch(e){
+        } catch (e) {
             console.error(e)
         }
     },
-    deleteCart: async function (cartId){
-        try{
+    changeStatus: async (orderId, newStatus) => {
+        try {
+            await db('orders')
+                .where('uuid', orderId)
+                .update('status', newStatus)
+        } catch (e) {
+            console.error(e)
+        }
+    },
+    deleteCart: async function (cartId) {
+        try {
             await db.transaction(async (trx) => {
                 await trx('cart_items').where('cart_id', cartId).del();
                 await trx('carts').where('cart_it', cartId).del()
             })
-        }catch(e){
+        } catch (e) {
             console.error(e)
         }
     }

@@ -18,6 +18,8 @@ exports.up = async function (knex){
         comments TEXT,
         FOREIGN KEY (user_id) REFERENCES users(uuid)
     );
+    ALTER TABLE orders ADD CONSTRAINT unique_order_id UNIQUE (uuid);
+
     
     `)
 }

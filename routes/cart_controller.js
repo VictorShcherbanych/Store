@@ -3,6 +3,7 @@ const db = require('../models/cart_model')
 
 module.exports = {
     getCart: async (req, res) => {
+        console.log(req.body)
         try {
             const userId = req.body.userId
             res.json(await db.getCart(userId))

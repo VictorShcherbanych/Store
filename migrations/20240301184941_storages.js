@@ -13,7 +13,8 @@ exports.up = async function (knex){
         phone_number VARCHAR(12) not null,
         email VARCHAR(255) not null,
         city VARCHAR(255) not null,
-        region VARCHAR(255) not null
+        region VARCHAR(255) not null,
+        CONSTRAINT unique_uuid UNIQUE (uuid)
     )`)
 };
 

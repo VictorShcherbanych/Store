@@ -8,8 +8,8 @@ exports.up = async function(knex) {
     create table carts (
         uuid uuid not null default uuid_generate_v4(),
         user_id UUID NOT NULL,
-        products JSON
-        primary key (uuid)
+        products JSON,
+        primary key (uuid),
         FOREIGN KEY (user_id) REFERENCES users (uuid)
     );
   `);

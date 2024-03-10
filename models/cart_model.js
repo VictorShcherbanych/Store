@@ -1,7 +1,4 @@
-const config = require('../knexfile');
-const knex = require('knex');
-
-const db = knex(config.development);
+const db = require('../db-config/index')
 
 module.exports = {
     getCart: async function (userId){
@@ -10,6 +7,15 @@ module.exports = {
             .where('user_id', userId)
             return cart
         } catch (e) {
+            console.error(e)
+        }
+    },
+    getCartWithProducts: async (cartId) =>{
+        try{
+            const products = await db('cart_items')
+                .where('cart_id', cartId)
+            return products
+        }catch (e){
             console.error(e)
         }
     },
@@ -71,5 +77,5 @@ module.exports = {
         }catch(e){
             console.error(e)
         }
-    }
+    },
 }

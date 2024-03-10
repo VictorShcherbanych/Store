@@ -1,5 +1,6 @@
 const db = require('../models/product_model')
 
+
 module.exports = {
     getProducts: async function (req,res) {
             try {

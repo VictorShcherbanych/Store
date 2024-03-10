@@ -1,7 +1,4 @@
-const config = require('../knexfile');
-const knex = require('knex');
-
-const db = knex(config.development);
+const db = require('../db-config/index')
 
 module.exports = {
     getProducts: async function getProducts() {

@@ -3,10 +3,10 @@ require('dotenv').config()
 const router = express();
 const middleware = require('../middleware')
 const { check } = require ('express-validator');
-const product_controller = require ('./product_controller')
-const user_controller = require('./user_controller');
-const cart_controller = require('./cart_controller');
-const order_controller = require('./order_controller')
+const product_controller = require ('../controllers/product_controller')
+const user_controller = require('../controllers/user_controller');
+const cart_controller = require('../controllers/cart_controller');
+const order_controller = require('../controllers/order_controller')
 
 const jsonParser = express.json();
 

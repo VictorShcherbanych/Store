@@ -1,42 +1,43 @@
-const db = require('../db-config/index')
-
-module.exports = {
-    getCart: async function (userId){
+class cartModel {
+    constructor({db}) {
+        this.db = db
+    }
+    getCart = async function (userId){
         try{
-            const cart = await db('carts')
+            const cart = await this.db('carts')
             .where('user_id', userId)
             return cart
         } catch (e) {
             console.error(e)
         }
-    },
-    getCartWithProducts: async (cartId) =>{
+    }
+    getCartWithProducts = async (cartId) =>{
         try{
-            const products = await db('cart_items')
+            const products = await this.db('cart_items')
                 .where('cart_id', cartId)
             return products
         }catch (e){
             console.error(e)
         }
-    },
-    createCart: async function (userId) {
+    }
+    createCart = async function (userId) {
         try{
-            await db('carts')
+            await this.db('carts')
             .insert({
                 user_id: userId
             });
         } catch (e) {
             console.error(e)
         }
-    },
-    addToCard: async function (userId, productId, quantity){
+    }
+    addToCard = async function (userId, productId, quantity){
         try{
-            const cartId = await db('carts')
+            const cartId = await this.db('carts')
                 .select('uuid')
                 .where({
                     user_id: userId
                 })
-            const cartData = await db('cart_items')
+            const cartData = await this.db('cart_items')
             .insert({
                 cart_id: cartId[0].uuid,
                 product_id: productId,
@@ -46,15 +47,15 @@ module.exports = {
         }catch(e){
             console.error(e)
         }
-    },
-    removeFromCart: async function (userId, productId){
+    }
+    removeFromCart = async function (userId, productId){
         try{
-            const cartId = await db('carts')
+            const cartId = await this.db('carts')
                 .select('uuid')
                 .where({
                     user_id: userId
                 })
-            await db('cart_items')
+            await this.db('cart_items')
             .where({
                 cart_is: cartId,
                 product_id: productId
@@ -63,10 +64,10 @@ module.exports = {
         } catch(e) {
             console.error(e)
         }
-    },
-    updateQuantity: async function (cartId, productId, newQuantity){
+    }
+    updateQuantity = async function (cartId, productId, newQuantity){
         try{
-            return await db('cart_items')
+            return await this.db('cart_items')
             .where({
                 cart_id: cartId,
                 product_id: productId
@@ -77,5 +78,7 @@ module.exports = {
         }catch(e){
             console.error(e)
         }
-    },
+    }
 }
+
+module.exports = cartModel

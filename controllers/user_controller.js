@@ -1,4 +1,3 @@
-const db = require('../models/user_model')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { validationResult } = require ('express-validator');
@@ -6,11 +5,13 @@ const { validationResult } = require ('express-validator');
 function generateToken(user) {
     return jwt.sign(user, process.env.secret_key, { expiresIn: '1h' });
 }
-
-module.exports = {
-    loginUser: async (req, res) => {
+class userController  {
+    constructor({userModel}) {
+        this.userModel = userModel
+    }
+    loginUser = async (req, res) => {
         try {
-            const user = await db.getUser(req.body.login)
+            const user = await this.userModel.getUser(req.body.login)
             if (!user) return res.status(400).send('Email or password is wrong');
             const validPassword = bcrypt.compareSync(req.body.password, user[0].password);
             if (!validPassword) return res.status(400).send('Email or password is wrong');
@@ -21,8 +22,8 @@ module.exports = {
         } catch (err) {
             console.error(err)
         }
-    },
-    addUser: async (req, res) => {
+    }
+    addUser = async (req, res) => {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
@@ -30,10 +31,12 @@ module.exports = {
             }
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             // Збереження користувача в базі даних
-            await db.createUser(req.body.login, hashedPassword, req.body.email, req.body.phonenumber)
+            await this.userModel.createUser(req.body.login, hashedPassword, req.body.email, req.body.phonenumber)
             res.status(201).send('User registered successfully');
         } catch (err) {
             console.error(err)
         }
     }
 }
+
+module.exports = userController

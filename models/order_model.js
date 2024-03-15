@@ -1,28 +1,29 @@
-const db = require('../db-config/index')
-
-module.exports = {
-    getOrders: async function (userId) {
+class orderModel {
+    constructor({db}) {
+        this.db = db
+    }
+    getOrders = async function (userId) {
         try {
-            const orders = await db('orders')
+            const orders = await this.db('orders')
                 .select('*')
                 .where('user_id', userId);
             return orders
         } catch (e) {
             console.error(e);
         }
-    },
-    getOrder: async function (orderId) {
+    }
+    getOrder = async function (orderId) {
         try {
-            const order = await db('orders')
+            const order = await this.db('orders')
                 .where("uuid", orderId)
             return order
         } catch (e) {
             console.error(e)
         }
-    },
-    createOrder: async (data, cartId) => {
+    }
+    createOrder = async (data, cartId) => {
         try {
-            const order = await db('orders')
+            const order = await this.db('orders')
                 .insert({
                     user_id: data.userId,
                     status: data.status,
@@ -34,7 +35,7 @@ module.exports = {
                     shipping_cost: data.shipping_cost,
                     comments: data.comments
                 })
-            await db.transaction(async (trx) => {
+            await this.db.transaction(async (trx) => {
 
                 const products = await trx
                     .select('product_id', 'quantity', 'price')
@@ -42,7 +43,7 @@ module.exports = {
                     .where({ cart_id: cartId })
 
                 console.log(products)
-                const orderId = await db('orders')
+                const orderId = await trx('orders')
                     .select('uuid')
                     .where({
                         user_id: data.userId
@@ -59,19 +60,19 @@ module.exports = {
         } catch (e) {
             console.error(e)
         }
-    },
-    changeStatus: async (orderId, newStatus) => {
+    }
+    changeStatus = async (orderId, newStatus) => {
         try {
-            await db('orders')
+            await this.db('orders')
                 .where('uuid', orderId)
                 .update('status', newStatus)
         } catch (e) {
             console.error(e)
         }
-    },
-    deleteCart: async function (cartId) {
+    }
+    deleteCart = async function (cartId) {
         try {
-            await db.transaction(async (trx) => {
+            await this.db.transaction(async (trx) => {
                 await trx('cart_items').where('cart_id', cartId).del();
                 await trx('carts').where('cart_it', cartId).del()
             })
@@ -80,3 +81,5 @@ module.exports = {
         }
     }
 }
+
+module.exports = orderModel

@@ -1,58 +1,59 @@
-const db = require('../models/cart_model')
-
-
-module.exports = {
-    getCart: async (req, res) => {
+class cartController {
+    constructor({cartModel}) {
+        this.cartModel = cartModel
+    }
+    getCart = async (req, res) => {
         console.log(req.body)
         try {
             const userId = req.body.userId
-            res.json(await db.getCart(userId))
+            res.json(await this.cartModel.getCart(userId))
         } catch (e) {
             console.error(e)
         }
-    },
-    addProduct: async (req, res) => {
+    }
+    addProduct = async (req, res) => {
         try {
             const {
                 body,
                 body: {
                     userId,
-                    product,
+                    productId,
                     quantity,
                 }
             } = req;
 
 
-            const cart = await db.getCart(userId)
-            console.log(cart)
-            if (!cart[0]) await db.createCart(userId)
+            const cart = await this.cartModel.getCart(userId)
+            if (!cart[0]) await this.cartModel.createCart(userId)
             if (!body) return res.status(400).send('Не вказано бажаних позицій');
 
-            res.json(await db.addToCard(userId, product, quantity))
+            res.json(await this.cartModel.addToCard(userId, productId, quantity))
         } catch (e) {
             console.error(e)
         }
-    },
-    removeProduct: async (req, res) => {
+    }
+    removeProduct = async (req, res) => {
         try {
             const {
                 userId,
                 product_id
             } = req.body;
 
-            res.json({ success: await db.removeFromCart(userId, product_id) });
+            res.json({ success: await this.cartModel.removeFromCart(userId, product_id) });
         } catch (e) {
             console.error(e)
         }
-    },
-    updateQuantity: async (req, res) => {
+    }
+    updateQuantity = async (req, res) => {
         try {
             const cartId = req.body.cartId
             const productid = req.body.productId
             const newQuantity = req.body.newQuantity
-            res.json(await db.updateQuantity(cartId, productid, newQuantity))
+            res.json(await this.cartModel.updateQuantity(cartId, productid, newQuantity))
         } catch (e) {
             console.error(e)
         }
     }
 }
+
+module.exports = cartController

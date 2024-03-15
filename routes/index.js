@@ -3,36 +3,40 @@ require('dotenv').config()
 const router = express();
 const middleware = require('../middleware')
 const { check } = require ('express-validator');
-const product_controller = require ('../controllers/product_controller')
-const user_controller = require('../controllers/user_controller');
-const cart_controller = require('../controllers/cart_controller');
-const order_controller = require('../controllers/order_controller')
+const {container, setup} = require('../di-setup/container')
+
+console.log(container.registrations);
+
+const cartController = container.resolve('cartController')
+const orderController = container.resolve('orderController')
+const userController = container.resolve('userController')
+const productController = container.resolve('productController')
 
 const jsonParser = express.json();
 
 //routes for products
-router.get("/api/products", jsonParser, product_controller.getProducts)
-router.post("/api/products", jsonParser,  product_controller.postProducts)
-router.put("/api/products/:id", jsonParser, middleware, product_controller.changeProduct)
-router.delete("/api/products/:id", jsonParser, middleware, product_controller.deleteProduct)
+router.get("/api/products", jsonParser, productController.getProducts)
+router.post("/api/products", jsonParser,  productController.postProducts)
+router.put("/api/products/:id", jsonParser, middleware, productController.changeProduct)
+router.delete("/api/products/:id", jsonParser, middleware, productController.deleteProduct)
 
 //routes for users
-router.post('/api/login', jsonParser, user_controller.loginUser);
+router.post('/api/login', jsonParser, userController.loginUser);
 router.post('/api/register', jsonParser,
     check('login', 'Поле логіну не може бути порожнім').notEmpty(),
     check('password', 'Пароль повинен мати від 4 до 12 символів').isLength({min:4, max:12}),
-    check('email', 'Email некоректний').matches(/[@]/), user_controller.addUser);
+    check('email', 'Email некоректний').matches(/[@]/), userController.addUser);
 
 //routes for carts
-router.get('/api/cart', jsonParser, cart_controller.getCart)
-router.post('/api/cart/add', jsonParser, cart_controller.addProduct)
-router.post("/api/cart/remove", jsonParser, cart_controller.removeProduct)
-router.post("/api/cart/update",jsonParser, cart_controller.updateQuantity)
+router.get('/api/cart', jsonParser, cartController.getCart)
+router.post('/api/cart/add', jsonParser, cartController.addProduct)
+router.post("/api/cart/remove", jsonParser, cartController.removeProduct)
+router.post("/api/cart/update",jsonParser, cartController.updateQuantity)
 
 //routes for orders
-router.get('/api/orders', jsonParser, order_controller.getOrders)
-router.get('/api/orders/:order_id',jsonParser, order_controller.getOrder)
-router.put('/api/orders/:order_id/status', jsonParser, order_controller.changeStatus)
-router.post('/api/orders', jsonParser, order_controller.createOrder)
+router.get('/api/orders', jsonParser, orderController.getOrders)
+router.get('/api/orders/:order_id',jsonParser, orderController.getOrder)
+router.put('/api/orders/:order_id/status', jsonParser, orderController.changeStatus)
+router.post('/api/orders', jsonParser, orderController.createOrder)
 
 module.exports = router

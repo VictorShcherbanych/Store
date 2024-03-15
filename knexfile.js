@@ -1,3 +1,4 @@
+const knexjs = require('knex')
 require('dotenv').config({path:'.env'});
 
 if (!process.env.SERVER_USER) {
@@ -8,18 +9,18 @@ if (!process.env.SERVER_USER) {
     throw new Error(`DB_CONNECTION env variable is not set`);
   }
   
-module.exports = {
-  development: {
+const db = knexjs({
     client: 'pg',
     connection: process.env.PG_CONNECTION,
     pool: {
       min: 0,  // Minimum number of connections in the pool
       max: 25, // Maximum number of connections in the pool
     },
-  },
   migrations: {
     directory: `${__dirname}/./migrations`,
     tableName: 'knex_migrations',
     schema: 'public'
   },
-};
+});
+
+module.exports = db

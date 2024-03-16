@@ -1,6 +1,6 @@
 class CartController {
-    
-    constructor ({CartModel}) {
+
+    constructor({ CartModel }) {
         this.CartModel = CartModel
     }
 
@@ -9,7 +9,7 @@ class CartController {
             const userId = req.body.userId
 
             res.json(await this.CartModel.getCart(userId))
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
@@ -30,7 +30,7 @@ class CartController {
             if (!body) return res.status(400).send('Не вказано бажаних позицій');
 
             res.json(await this.CartModel.addToCard(userId, productId, quantity))
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
@@ -43,7 +43,7 @@ class CartController {
             } = req.body;
 
             res.json({ success: await this.CartModel.removeFromCart(userId, product_id) });
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
@@ -55,7 +55,7 @@ class CartController {
             const newQuantity = req.body.newQuantity
 
             res.json(await this.CartModel.updateQuantity(cartId, productid, newQuantity))
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }

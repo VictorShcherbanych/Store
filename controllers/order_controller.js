@@ -1,6 +1,6 @@
 class OrderController {
-    
-    constructor({OrderModel, CartModel}) {
+
+    constructor({ OrderModel, CartModel }) {
         this.OrderModel = OrderModel,
         this.CartModel = CartModel
     }
@@ -27,39 +27,39 @@ class OrderController {
             const order = await this.OrderModel.createOrder(body, cart[0].uuid)
 
             res.status(201).send('Замовлення прийнято');
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
 
     getOrder = async (req, res) => {
-        try{
+        try {
             orderId = req.params.order_id
             res.send(await this.OrderModel.getOrder(orderId))
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
 
-    getOrders = async (req, res) =>{
-        try{
+    getOrders = async (req, res) => {
+        try {
             const userId = req.body.userId
             res.send(await this.OrderModel.getOrders(userId))
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
 
     changeStatus = async (req, res) => {
-        try{
-            if(!req.params) res.status(404).send('Не вказано id замовлення')
+        try {
+            if (!req.params) res.status(404).send('Не вказано id замовлення')
 
             const newStatus = req.body.status
             const orderId = req.params.order_id
             await this.OrderModel.changeStatus(orderId, newStatus)
 
             res.send('Статус успішно змінено')
-        } catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }

@@ -1,4 +1,5 @@
-class productModel {
+class ProductModel {
+
     constructor({ db }) {
         this.db = db
     }
@@ -12,6 +13,7 @@ class productModel {
             console.error(e);
         }
     }
+
     postProducts = async (name, price, picture, description) => {
         try {
             const products = await this.db('products')
@@ -26,6 +28,7 @@ class productModel {
             console.error(e)
         }
     }
+
     changeProduct = async (id, newData) => {
         try {
             await this.db('products')
@@ -35,6 +38,7 @@ class productModel {
             console.error(e)
         }
     }
+
     deleteProduct = async (id) => {
         try {
             await this.db('products')
@@ -44,6 +48,7 @@ class productModel {
             console.error(e)
         }
     }
+
     createUser = async (login, password, email, phonenumber) => {
         try {
             await db('users')
@@ -58,6 +63,7 @@ class productModel {
             console.error(e)
         }
     }
+
     getUser = async (login) => {
         try {
             const user = await db('users')
@@ -68,4 +74,5 @@ class productModel {
         }
     }
 }
-module.exports = productModel
+
+module.exports = ProductModel

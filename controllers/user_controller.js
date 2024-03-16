@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { validationResult } = require ('express-validator');
+const { validationResult } = require('express-validator');
 
 function generateToken(user) {
     return jwt.sign(user, process.env.secret_key, { expiresIn: '1h' });
 }
 
-class UserController  {
+class UserController {
 
-    constructor({UserModel}) {
+    constructor({ UserModel }) {
         this.UserModel = UserModel
     }
 
@@ -19,11 +19,11 @@ class UserController  {
 
             const validPassword = bcrypt.compareSync(req.body.password, user[0].password);
             if (!validPassword) return res.status(400).send('Email or password is wrong');
-    
+
             const token = generateToken({ id: user.id, login: user.login });
 
             res.header('authorization', token).send(token);
-        } catch(err) {
+        } catch (err) {
             console.error(err)
         }
     }
@@ -32,7 +32,7 @@ class UserController  {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
-                return res.status(400).json({message: 'Помилка при реєстрації', errors})
+                return res.status(400).json({ message: 'Помилка при реєстрації', errors })
             }
 
             const hashedPassword = await bcrypt.hash(req.body.password, 10);

@@ -11,12 +11,12 @@ const data = {
 };
 
 const postData = async () => {
-    await axios.post(url, data);
+  await axios.post(url, data);
 };
 
 
 const sendRequest = async (url) => {
-    console.log('sending', url)
+  console.log('sending', url)
   await axios.get(url);
 };
 

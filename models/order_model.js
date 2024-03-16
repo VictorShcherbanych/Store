@@ -1,8 +1,8 @@
 class orderModel {
-    constructor({db}) {
+    constructor({ db }) {
         this.db = db
     }
-    getOrders = async function (userId) {
+    getOrders = async (userId) => {
         try {
             const orders = await this.db('orders')
                 .select('*')
@@ -12,7 +12,7 @@ class orderModel {
             console.error(e);
         }
     }
-    getOrder = async function (orderId) {
+    getOrder = async (orderId) => {
         try {
             const order = await this.db('orders')
                 .where("uuid", orderId)
@@ -70,7 +70,7 @@ class orderModel {
             console.error(e)
         }
     }
-    deleteCart = async function (cartId) {
+    deleteCart = async (cartId) => {
         try {
             await this.db.transaction(async (trx) => {
                 await trx('cart_items').where('cart_id', cartId).del();

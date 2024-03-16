@@ -2,7 +2,7 @@ class cartModel {
     constructor({db}) {
         this.db = db
     }
-    getCart = async function (userId){
+    getCart = async (userId) => {
         try{
             const cart = await this.db('carts')
             .where('user_id', userId)
@@ -11,7 +11,7 @@ class cartModel {
             console.error(e)
         }
     }
-    getCartWithProducts = async (cartId) =>{
+    getCartWithProducts = async (cartId) => {
         try{
             const products = await this.db('cart_items')
                 .where('cart_id', cartId)
@@ -20,7 +20,7 @@ class cartModel {
             console.error(e)
         }
     }
-    createCart = async function (userId) {
+    createCart = async (userId) => {
         try{
             await this.db('carts')
             .insert({
@@ -30,7 +30,7 @@ class cartModel {
             console.error(e)
         }
     }
-    addToCard = async function (userId, productId, quantity){
+    addToCard = async (userId, productId, quantity) => {
         try{
             const cartId = await this.db('carts')
                 .select('uuid')
@@ -48,7 +48,7 @@ class cartModel {
             console.error(e)
         }
     }
-    removeFromCart = async function (userId, productId){
+    removeFromCart = async (userId, productId) => {
         try{
             const cartId = await this.db('carts')
                 .select('uuid')
@@ -65,7 +65,7 @@ class cartModel {
             console.error(e)
         }
     }
-    updateQuantity = async function (cartId, productId, newQuantity){
+    updateQuantity = async (cartId, productId, newQuantity) => {
         try{
             return await this.db('cart_items')
             .where({

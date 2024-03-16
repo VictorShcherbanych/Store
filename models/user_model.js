@@ -2,7 +2,7 @@ class userModel  {
     constructor({db}) {
         this.db = db
     }
-    createUser = async function createUser (login, password, email, phonenumber){
+    createUser = async  (login, password, email, phonenumber) => {
         try{
             await this.db('users')
             .insert({
@@ -16,7 +16,7 @@ class userModel  {
             console.error(e)
         }
     }
-    getUser = async function getUser(login){
+    getUser = async (login) => {
         try{
             const user =  await this.db('users')
             .where('login', login)

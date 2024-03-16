@@ -1,19 +1,16 @@
-const productModel = require("../models/product_model");
-const a = new productModel
-
 class productController {
     constructor({productModel}) {
         this.productModel = productModel;
     }
-    getProducts = async function (req,res) {
+    getProducts = async (req,res) => {
             try {
-                res.json(a.getProducts())
+                res.json(await this.productModel.getProducts())
             } catch (e) {
                 console.error(e)
         }
     }
 
-    postProducts = async function (req, res){
+    postProducts = async  (req, res) => {
         try{
             if(!req.body) return res.sendStatus(400);
             const name = req.body.name;
@@ -26,7 +23,7 @@ class productController {
         }
     }
 
-    changeProduct = async function (req, res){
+    changeProduct = async  (req, res) => {
         try {
             if(!req.body) return res.sendStatus(400);
             const productId = req.params.id 
@@ -36,7 +33,7 @@ class productController {
         }
     }
 
-    deleteProduct = async function (req, res){
+    deleteProduct = async (req, res) => {
         try {
             if(!req.params) return res.sendStatus(400);
             res.json(await this.productModel.deleteProduct(req.params.id))

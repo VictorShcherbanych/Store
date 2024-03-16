@@ -1,11 +1,10 @@
 class productModel {
-    constructor({db}) {
+    constructor({ db }) {
         this.db = db
     }
 
-    getProducts = async function () {
+    getProducts = async () => {
         try {
-            console.log(this.db)
             const products = await this.db('products')
                 .select('*')
             return products
@@ -13,7 +12,7 @@ class productModel {
             console.error(e);
         }
     }
-    postProducts = async function (name, price, picture, description) {
+    postProducts = async (name, price, picture, description) => {
         try {
             const products = await this.db('products')
                 .insert({
@@ -26,8 +25,8 @@ class productModel {
         } catch (e) {
             console.error(e)
         }
-    } 
-    changeProduct = async function (id, newData) {
+    }
+    changeProduct = async (id, newData) => {
         try {
             await this.db('products')
                 .where({ uuid: id })
@@ -36,47 +35,37 @@ class productModel {
             console.error(e)
         }
     }
-    deleteProduct = async function (id) {
-        try{
+    deleteProduct = async (id) => {
+        try {
             await this.db('products')
-                .where({ uuid: id})
+                .where({ uuid: id })
                 .del()
         } catch (e) {
             console.error(e)
         }
     }
-    createUser = async function createUser (login, password, email, phonenumber){
-        try{
+    createUser = async (login, password, email, phonenumber) => {
+        try {
             await db('users')
-            .insert({
-                login: login,
-                password: password,
-                email: email,
-                phonenumber: phonenumber,
-                role: "role"
-            });
+                .insert({
+                    login: login,
+                    password: password,
+                    email: email,
+                    phonenumber: phonenumber,
+                    role: "role"
+                });
         } catch (e) {
             console.error(e)
         }
-        }
     }
-    getUser = async function getUser(login){
-        try{
-            const user =  await db('users')
-            .where('login', login)
-            return user
-        } catch (e) {
-            console.error(e)
-    }
-    },
-    getUser = async function getUser(login){
-        try{
-            const user =  await db('users')
-            .where('login', login)
+    getUser = async (login) => {
+        try {
+            const user = await db('users')
+                .where('login', login)
             return user
         } catch (e) {
             console.error(e)
         }
-    }        
-
+    }
+}
 module.exports = productModel

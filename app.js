@@ -1,7 +1,11 @@
 'use strict';
 
 // External
-const express = require('express'); 
+const express = require('express');
+
+const {setup} = require('./di-setup/container')
+
+setup()
 
 // Internal
 const router = require('./routes/index');

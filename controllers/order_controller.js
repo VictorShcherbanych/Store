@@ -1,8 +1,10 @@
-class orderController {
-    constructor({orderModel, cartModel}) {
-        this.orderModel = orderModel,
-        this.cartModel = cartModel
+class OrderController {
+    
+    constructor({OrderModel, CartModel}) {
+        this.OrderModel = OrderModel,
+        this.CartModel = CartModel
     }
+
     createOrder = async (req, res) => {
         try {
             const {
@@ -19,11 +21,13 @@ class orderController {
                     comments
                 }
             } = req;
+
             if (!body) return res.status(400).send('Відсутні вказані данні');
-            const cart = await this.cartModel.getCart(req.body.userId)
-            const order = await this.orderModel.createOrder(body, cart[0].uuid)
+            const cart = await this.CartModel.getCart(req.body.userId)
+            const order = await this.OrderModel.createOrder(body, cart[0].uuid)
+
             res.status(201).send('Замовлення прийнято');
-        } catch (e) {
+        } catch(e) {
             console.error(e)
         }
     }
@@ -31,8 +35,8 @@ class orderController {
     getOrder = async (req, res) => {
         try{
             orderId = req.params.order_id
-            res.send(await this.orderModel.getOrder(orderId))
-        }catch(e){
+            res.send(await this.OrderModel.getOrder(orderId))
+        } catch(e) {
             console.error(e)
         }
     }
@@ -40,8 +44,8 @@ class orderController {
     getOrders = async (req, res) =>{
         try{
             const userId = req.body.userId
-            res.send(await this.orderModel.getOrders(userId))
-        }catch(e){
+            res.send(await this.OrderModel.getOrders(userId))
+        } catch(e) {
             console.error(e)
         }
     }
@@ -49,14 +53,16 @@ class orderController {
     changeStatus = async (req, res) => {
         try{
             if(!req.params) res.status(404).send('Не вказано id замовлення')
+
             const newStatus = req.body.status
             const orderId = req.params.order_id
-            await this.orderModel.changeStatus(orderId, newStatus)
+            await this.OrderModel.changeStatus(orderId, newStatus)
+
             res.send('Статус успішно змінено')
-        }catch(e) {
+        } catch(e) {
             console.error(e)
         }
     }
 }
 
-module.exports = orderController
+module.exports = OrderController

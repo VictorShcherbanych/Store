@@ -4,6 +4,16 @@ class ProductModel {
         this.db = db
     }
 
+    getProductWithId = async (productId) => {
+        try {
+            const product = await this.db('products')
+            .where('uuid', productId)
+            return product
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     getProducts = async () => {
         try {
             const products = await this.db('products')
@@ -16,14 +26,14 @@ class ProductModel {
 
     postProducts = async (name, price, picture, description) => {
         try {
-            const products = await this.db('products')
+            const product = await this.db('products')
                 .insert({
                     name: name,
                     price: price,
                     picture: picture,
                     description: description
                 })
-            return products
+            return product
         } catch (e) {
             console.error(e)
         }
@@ -35,7 +45,7 @@ class ProductModel {
                 .where({ uuid: id })
                 .update(newData)
         } catch (e) {
-            console.error(e)
+            throw Error(e)
         }
     }
 
@@ -44,31 +54,6 @@ class ProductModel {
             await this.db('products')
                 .where({ uuid: id })
                 .del()
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    createUser = async (login, password, email, phonenumber) => {
-        try {
-            await db('users')
-                .insert({
-                    login: login,
-                    password: password,
-                    email: email,
-                    phonenumber: phonenumber,
-                    role: "role"
-                });
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    getUser = async (login) => {
-        try {
-            const user = await db('users')
-                .where('login', login)
-            return user
         } catch (e) {
             console.error(e)
         }

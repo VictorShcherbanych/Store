@@ -9,6 +9,7 @@ const CartController = container.resolve('CartController')
 const OrderController = container.resolve('OrderController')
 const UserController = container.resolve('UserController')
 const ProductController = container.resolve('ProductController')
+const DocumentsController = container.resolve('DocumentsController')
 
 const jsonParser = express.json();
 
@@ -37,5 +38,11 @@ router.get('/api/orders', jsonParser, middleware, OrderController.getOrders)
 router.get('/api/orders/:order_id', jsonParser, middleware, OrderController.getOrder)
 router.put('/api/orders/:order_id/status', jsonParser, middleware, OrderController.changeStatus)
 router.post('/api/orders', jsonParser, middleware, OrderController.createOrder)
+
+// routes for documents
+router.get('/api/documents', jsonParser, DocumentsController.getDocuments)
+router.post('/api/warehouse', jsonParser, DocumentsController.addWarehouse)
+router.post('/api/documents', jsonParser, DocumentsController.addDocument)
+router.post('/api/product_document', jsonParser, DocumentsController.addProductDocument)
 
 module.exports = router

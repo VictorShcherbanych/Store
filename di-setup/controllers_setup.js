@@ -1,15 +1,15 @@
 // controllers.js
 const { asClass } = require('awilix');
-const cartController = require('../controllers/cart_controller');
-const userController = require('../controllers/user_controller');
-const orderController = require('../controllers/order_controller');
-const productController = require('../controllers/product_controller');
+const CartController = require('../controllers/cart_controller');
+const UserController = require('../controllers/user_controller');
+const OrderController = require('../controllers/order_controller');
+const ProductController = require('../controllers/product_controller');
 
 module.exports = (container) => {
   container.register({
-    cartController: asClass(cartController),
-    userController: asClass(userController),
-    orderController: asClass(orderController),
-    productController: asClass(productController),
+    CartController: asClass(CartController),
+    UserController: asClass(UserController),
+    OrderController: asClass(OrderController),
+    ProductController: asClass(ProductController),
   });
 };

@@ -1,7 +1,9 @@
-class orderModel {
+class OrderModel {
+
     constructor({ db }) {
         this.db = db
     }
+
     getOrders = async (userId) => {
         try {
             const orders = await this.db('orders')
@@ -12,6 +14,7 @@ class orderModel {
             console.error(e);
         }
     }
+
     getOrder = async (orderId) => {
         try {
             const order = await this.db('orders')
@@ -21,6 +24,7 @@ class orderModel {
             console.error(e)
         }
     }
+
     createOrder = async (data, cartId) => {
         try {
             const order = await this.db('orders')
@@ -61,6 +65,7 @@ class orderModel {
             console.error(e)
         }
     }
+
     changeStatus = async (orderId, newStatus) => {
         try {
             await this.db('orders')
@@ -70,6 +75,7 @@ class orderModel {
             console.error(e)
         }
     }
+
     deleteCart = async (cartId) => {
         try {
             await this.db.transaction(async (trx) => {
@@ -82,4 +88,4 @@ class orderModel {
     }
 }
 
-module.exports = orderModel
+module.exports = OrderModel

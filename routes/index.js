@@ -13,10 +13,11 @@ const ProductController = container.resolve('ProductController')
 const jsonParser = express.json();
 
 //routes for products
-router.get("/api/products", jsonParser, middleware, ProductController.getProducts)
-router.post("/api/products", jsonParser, middleware, ProductController.postProducts)
-router.put("/api/products/:id", jsonParser, middleware, ProductController.changeProduct)
-router.delete("/api/products/:id", jsonParser, middleware, ProductController.deleteProduct)
+router.get("/api/products", jsonParser, ProductController.getProducts)
+router.get("/api/products/:productId", jsonParser, ProductController.getProductswithId)
+router.post("/api/products", jsonParser, ProductController.postProducts)
+router.put("/api/products/:id", jsonParser, ProductController.changeProduct)
+router.delete("/api/products/:id", jsonParser, ProductController.deleteProduct)
 
 //routes for users
 router.post('/api/login', jsonParser, UserController.loginUser);
